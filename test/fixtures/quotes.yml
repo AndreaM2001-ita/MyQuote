@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  quoteText: MyString
+  isPublic: false
+  datePosted: 2024-08-22
+  User: one
+  Philosopher: one
+
+two:
+  quoteText: MyString
+  isPublic: false
+  datePosted: 2024-08-22
+  User: two
+  Philosopher: two
