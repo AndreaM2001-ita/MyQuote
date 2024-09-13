@@ -11,37 +11,43 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :firstName, style: "display: block" %>
-    <%= form.text_field :firstName %>
+  <div class="form-group" style="padding-bottom: 10px;">
+    <!--<%= form.label :firstName, style: "display: block" %>-->
+
+    <%= form.text_field :firstName, placeholder: 'First Name', class: 'form-control' %>
+  </div>
+
+  <div class="form-group" style="padding-bottom: 10px;">
+    <!--<%= form.label :lastName, style: "display: block" %>-->
+
+    <%= form.text_field :lastName, placeholder: 'Last Name', class: 'form-control' %>
+  </div>
+
+  <div class="form-group" style="padding-bottom: 10px;">
+    <!--<%= form.label :Email, style: "display: block" %>-->
+
+    <%= form.text_field :email, placeholder: 'Email', class: 'form-control' %>
+  </div>
+
+  <div class="form-group" style="padding-bottom: 10px;">
+    <!--<%= form.label :password_digest, style: "display: block" %>-->
+    <%= form.password_field :password_digest, placeholder: 'Choose a strong password', class: 'form-control' %>
   </div>
 
   <div>
-    <%= form.label :lastName, style: "display: block" %>
-    <%= form.text_field :lastName %>
+    <!--<%= form.label :status, style: "display: block" %>
+    <%= form.text_field :status %>-->
+    <%= form.hidden_field :status, value: "Active" %>
   </div>
 
   <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.text_field :email %>
+    <!--<%= form.label :is_admin, style: "display: block" %>
+    <%= form.check_box :is_admin %>-->
+    <%= form.hidden_field :is_admin, value: false %>
   </div>
 
   <div>
-    <%= form.label :password_digest, style: "display: block" %>
-    <%= form.text_field :password_digest %>
-  </div>
-
-  <div>
-    <%= form.label :status, style: "display: block" %>
-    <%= form.text_field :status %>
-  </div>
-
-  <div>
-    <%= form.label :is_admin, style: "display: block" %>
-    <%= form.check_box :is_admin %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <!--<%= form.submit %>-->
+    <%= form.submit 'Submit', class: 'btn btn-primary' %>
   </div>
 <% end %>

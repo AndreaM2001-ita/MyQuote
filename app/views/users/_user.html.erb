@@ -15,8 +15,8 @@
   </p>
 
   <p>
-    <strong>Password digest:</strong>
-    <%= user.password_digest %>
+    <strong>Current Password: </strong><span class="text-danger">ENCRYPTED</span>
+    <% user.password_digest %>
   </p>
 
   <p>

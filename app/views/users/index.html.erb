@@ -1,14 +1,24 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Users</h1>
+<h3>Manage Users</h3>
 
 <div id="users">
   <% @users.each do |user| %>
-    <%= render user %>
-    <p>
-      <%= link_to "Show this user", user %>
-    </p>
-  <% end %>
+    <div class="user card mb-4">
+      <div class="card-body">
+        <p class="card-text"><span style="font-weight: 600;">First Name:</span> <%=
+        user.firstName %></p>
+        <p class="card-text"><span style="font-weight: 600;">Last Name:</span> <%=
+        user.lastName %></p>
+        <p class="card-text"><span style="font-weight: 600;">Email:</span> <%= user.email
+        %></p>
+        <p class="card-text"><span style="font-weight: 600;">Status:</span> <%=
+        user.status %></p>
+        <a href="<%= user_path(user) %>" class="btn btn-primary">Manage User</a>
+      </div>
+  </div>
+<% end %>
 </div>
 
-<%= link_to "New user", new_user_path %>
+
+<% link_to "New user", new_user_path %>

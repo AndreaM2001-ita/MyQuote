@@ -1,0 +1,14 @@
+<h1>Welcome to MyQuote App</h1>
+<p>Find all the best philosophical quotes</p>
+
+<h3>Recently added quotes</h3>
+
+<% @quotes.each do |quote| %>
+    <div class="card bg-body-tertiary" style="margin-bottom:10px">
+        <div class="card-body">
+            <h4 class="card-title"><%= "#{quote.Philosopher.firstName} #{quote.Philosopher.lastName}" %></h4>
+            <p class="card-text"><%= quote.quoteText %><!--<br />[<a href="/quotes/<%=
+            quote.id %>">Read full quote</a>]--></p>
+        </div>
+    </div>
+<% end %>

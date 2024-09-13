@@ -1,0 +1,31 @@
+=> 
+[[32m#<User:0x00007c41b87caf08[0m
+  id: [34m[1m1[0m,
+  firstName: [31m[1m"[0m[31mJohn[0m[31m[1m"[0m,
+  lastName: [31m[1m"[0m[31mJones[0m[31m[1m"[0m,
+  email: [31m[1m"[0m[31madmin@myquote.com[0m[31m[1m"[0m,
+  password_digest: [31m[1m"[0m[31m[FILTERED][0m[31m[1m"[0m,
+  status: [31m[1m"[0m[31mActive[0m[31m[1m"[0m,
+  is_admin: [36m[1mtrue[0m,
+  created_at: Fri, 13 Sep 2024 00:16:46.821827000 UTC +00:00,
+  updated_at: Fri, 13 Sep 2024 00:16:46.821827000 UTC +00:00[32m>[0m,
+ [32m#<User:0x00007c41b87cadc8[0m
+  id: [34m[1m2[0m,
+  firstName: [31m[1m"[0m[31mVincent[0m[31m[1m"[0m,
+  lastName: [31m[1m"[0m[31mBrown[0m[31m[1m"[0m,
+  email: [31m[1m"[0m[31mvince@myemail.com[0m[31m[1m"[0m,
+  password_digest: [31m[1m"[0m[31m[FILTERED][0m[31m[1m"[0m,
+  status: [31m[1m"[0m[31mActive[0m[31m[1m"[0m,
+  is_admin: [36m[1mfalse[0m,
+  created_at: Fri, 13 Sep 2024 00:18:52.911907000 UTC +00:00,
+  updated_at: Fri, 13 Sep 2024 00:18:52.911907000 UTC +00:00[32m>[0m,
+ [32m#<User:0x00007c41b87cac88[0m
+  id: [34m[1m3[0m,
+  firstName: [31m[1m"[0m[31mAndrea[0m[31m[1m"[0m,
+  lastName: [31m[1m"[0m[31mMarcosano[0m[31m[1m"[0m,
+  email: [31m[1m"[0m[31mamarcosa@our.ecu.edu.au[0m[31m[1m"[0m,
+  password_digest: [31m[1m"[0m[31m[FILTERED][0m[31m[1m"[0m,
+  status: [31m[1m"[0m[31mActive[0m[31m[1m"[0m,
+  is_admin: [36m[1mfalse[0m,
+  created_at: Fri, 13 Sep 2024 00:20:52.632816000 UTC +00:00,
+  updated_at: Fri, 13 Sep 2024 00:20:52.632816000 UTC +00:00[32m>[0m]
