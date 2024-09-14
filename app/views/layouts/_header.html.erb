@@ -16,44 +16,53 @@
         <li class="nav-item">
         <%= link_to "About", about_path, class:"nav-link" %>
         </li>
-        <li class="nav-item">
-        <li><%= link_to "Sign Up", new_user_path, class:"nav-link" %></li>
-        </li>
-        <li class="nav-item">
-        <li><a class="nav-link" href="#">Sign In</a></li>
-        </li>
-        <li class="nav-item">
-        <li><a class="nav-link" href="#">Sign Out</a></li>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            User
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">My Account</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">    Update Details</a></li>
-            <li><a class="dropdown-item" href="#">Chnage Password</a></li>
+        <% if !logged_in? %>
+          <li class="nav-item">
+          <li><%= link_to 'Sign Up', new_user_path, class:"nav-link" %></li>
+          </li>
+        <% end %>
 
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">My Quotes</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">  Add new Quote</a></li>
-            <li><a class="dropdown-item" href="#">  Add new Philosopher</a></li>
-            <li><a class="dropdown-item" href="#">  Add new Category</a></li>
-          </ul>
+        <% if !logged_in? %>
+          <li class="nav-item">
+          <li><%= link_to 'Sign In', login_path, class:"nav-link" %></li>
+          </li>
+        <% end %>
+        <% if logged_in? %>
+        <li class="nav-item">
+        <%= button_to "Sign Out", logout_path, method: :delete, class:"btn btn-link nav-link"%>
         </li>
+        <% end %>
+        <% if logged_in? && !is_administrator? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              User
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">My Account</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">    Update Details</a></li>
+              <li><a class="dropdown-item" href="#">Change Password</a></li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Admin
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Admin Home</a></li>
-            <li><%= link_to 'Manage Users', users_path, class:"dropdown-item"%></li>
-          </ul>
-        </li>
-
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">My Quotes</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">  Add new Quote</a></li>
+              <li><a class="dropdown-item" href="#">  Add new Philosopher</a></li>
+              <li><a class="dropdown-item" href="#">  Add new Category</a></li>
+            </ul>
+          </li>
+        <% end %>
+        <% if logged_in? && is_administrator? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Admin
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Admin Home</a></li>
+              <li><%= link_to 'Manage Users', users_path, class:"dropdown-item"%></li>
+            </ul>
+          </li>
+        <% end %>
         <!--
         <li class="nav-item">
           <a class="nav-link disabled" aria-disabled="true">Disabled</a>

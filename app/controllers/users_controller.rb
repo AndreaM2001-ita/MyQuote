@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :require_login, except: [:new, :create]
 
   # GET /users or /users.json
   def index
@@ -25,7 +26,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to user_url(@user), notice: "User was successfully created." }
+        #format.html { redirect_to user_url(@user), notice: "User was successfully created." }
+        format.html { redirect_to login_path, notice: "Sign up successful. Please log in." }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new, status: :unprocessable_entity }

@@ -1,3 +1,3 @@
 class Philosopher < ApplicationRecord
-    has_many :quotes, dependent: :nullify
+    has_many :Quotes, dependent: :nullify
 end

@@ -1,0 +1,12 @@
+<h3>Your Recipes</h3>
+<hr />
+<% @quotes.each do |quote| %>
+<div class="card bg-body-tertiary" style="margin-bottom:10px">
+    <div class="card-body">
+        <h5 class="text-primary">
+            <%= "#{quote.Philosopher.firstName} #{quote.Philosopher.lastName}" %>
+        </h5>
+        <p><%= quote.quoteText %>
+    </div>
+</div>
+<% end %>
