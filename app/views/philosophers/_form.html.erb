@@ -1,42 +1,42 @@
-<%= form_with(model: philosopher) do |form| %>
-  <% if philosopher.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(philosopher.errors.count, "error") %> prohibited this philosopher from being saved:</h2>
+<% if philosopher.errors.any? %>
+  <div class="alert alert-danger">
+    <h2><%= pluralize(philosopher.errors.count, "error") %> prohibited this philosopher from being saved:</h2>
 
-      <ul>
-        <% philosopher.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+    <ul>
+      <% philosopher.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
 
-  <div>
-    <%= form.label :firstName, style: "display: block" %>
-    <%= form.text_field :firstName %>
+<%= form_with(model: philosopher, local: true) do |f| %>
+  <div class="form-group" style="padding-bottom: 10px;">
+    <%= f.label :firstName, "First Name", class: "form-label" %>
+    <%= f.text_field :firstName, placeholder: "Enter First Name", class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :lastName, style: "display: block" %>
-    <%= form.text_field :lastName %>
+  <div class="form-group" style="padding-bottom: 10px;">
+    <%= f.label :lastName, "Last Name", class: "form-label" %>
+    <%= f.text_field :lastName, placeholder: "Enter Last Name", class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :birthYear, style: "display: block" %>
-    <%= form.number_field :birthYear %>
+  <div class="form-group" style="padding-bottom: 10px;">
+    <%= f.label :birthYear, "Birth Year", class: "form-label" %>
+    <%= f.number_field :birthYear, placeholder: "Enter Birth Year", min: 0, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :deathYear, style: "display: block" %>
-    <%= form.number_field :deathYear %>
+  <div class="form-group" style="padding-bottom: 10px;">
+    <%= f.label :deathYear, "Death Year", class: "form-label" %>
+    <%= f.number_field :deathYear, placeholder: "Enter Death Year", min: 0, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :biography, style: "display: block" %>
-    <%= form.text_area :biography %>
+  <div class="form-group" style="padding-bottom: 10px;">
+    <%= f.label :biography, "Biography", class: "form-label" %>
+    <%= f.text_area :biography, placeholder: "Enter Biography", class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="mt-3">
+    <%= f.submit philosopher.new_record? ? 'Create Philosopher' : 'Edit Philosopher', class: 'btn btn-primary btn-lg' %>
   </div>
 <% end %>

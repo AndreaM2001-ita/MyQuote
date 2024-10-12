@@ -1,17 +1,22 @@
 Rails.application.routes.draw do
   get 'search/index'
   #get 'home/index'
-  resources :category_quotes
-  resources :categories
-  resources :comments
-  resources :quotes
+    
   resources :philosophers
   resources :users
+  resources :category_quotes
+  resources :categories
+
+  resources :quotes do
+    resources :comments
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   get 'about', to: 'about#index'  #about page
 
   get 'search', to: 'search#index'  #search page
+
 
   get 'login', to:'sessions#new'  #new login
 
@@ -23,7 +28,12 @@ Rails.application.routes.draw do
 
   get '/userhome', to: 'home#uindex'  #user homepage
 
-  get '/your-quotes', to: 'home#uquotes'  #quotes of current user
+  get '/quotes', to: 'home#uquotes'  #quotes of current user
+
+  get '/change_password', to: 'users#change_password'
+  patch '/change_password', to: 'users#update_password'
+
+
 
   # Defines the root path route ("/")
   root "home#index"

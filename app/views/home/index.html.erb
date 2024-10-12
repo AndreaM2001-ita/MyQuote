@@ -1,14 +1,42 @@
-<h1>Welcome to MyQuote App</h1>
+<h1 >Welcome to MyQuote App</h1>
 <p>Find all the best philosophical quotes</p>
 
-<h3>Recently added quotes</h3>
+<h3 class="my-4">Recently Added Quotes</h3>
 
-<% @quotes.each do |quote| %>
-    <div class="card bg-body-tertiary" style="margin-bottom:10px">
+<div class="row">
+  <% @quotes.each do |quote| %>
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm h-100">
         <div class="card-body">
-            <h4 class="card-title"><%= "#{quote.Philosopher.firstName} #{quote.Philosopher.lastName}" %></h4>
-            <p class="card-text"><%= quote.quoteText %><!--<br />[<a href="/quotes/<%=
-            quote.id %>">Read full quote</a>]--></p>
+          <% if quote.philosopher.present? %>
+            <h5 class="card-title text-primary">
+              Author: <strong><%= "#{quote.philosopher.firstName} #{quote.philosopher.lastName}" %></strong>
+            </h5>
+          <% else %>
+            <h5 class="card-title text-primary">Author: <strong>Anonymous</strong></h5>
+          <% end %>
+          <hr>
+          <p class="card-text"><em>Quote:</em> <%= quote.quoteText %></p>
+          <p class="card-text">
+            <strong>Posted By:</strong> <%= "#{quote.user.firstName}" %>
+          </p>
+          <% if quote.datePosted.present? %>
+            <p class="card-text">
+              <small class="text-muted">Date Posted: <%= quote.datePosted.strftime("%B %d, %Y") %></small>
+            </p>
+          <% else %>
+            <p class="card-text"><small class="text-muted">Date Posted: Not available</small></p>
+          <% end %>
+
+          <div class="quote-footer" style="display: flex; justify-content: flex-end; margin-top: 15px;">
+            <%= link_to "Show Comments", quote_comments_path(quote.id), class: "btn btn-secondary btn-sm", style: "margin-right: 10px;" %>
+            
+            <% if logged_in? %> 
+              <%= link_to "Add Comment", new_quote_comment_path(quote.id), class: "btn btn-primary btn-sm" %>
+            <% end %>
+          </div>
         </div>
+      </div>
     </div>
-<% end %>
+  <% end %>
+</div>

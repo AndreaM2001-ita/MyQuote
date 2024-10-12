@@ -1,7 +1,15 @@
-<div id="<%= dom_id category %>">
-  <p>
-    <strong>Catname:</strong>
-    <%= category.catName %>
-  </p>
-
+<% if @category.errors.any? %>
+  <div class="alert alert-danger">
+    <h4>There were some problems with your submission:</h4>
+    <ul>
+      <% @category.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<div id="<%= dom_id category %>" class="category-card">
+  <h3 class="category-title">
+    <strong>Category Name:</strong> <%= category.catName %>
+  </h3>
 </div>

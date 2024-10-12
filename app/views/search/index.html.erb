@@ -4,22 +4,45 @@
     <div class="form-group" style="padding-bottom: 10px;">
         <%= text_field_tag :philosopher_query, params[:philosopher_query], placeholder: "Enter a Philosopher's name", class: "form-control" %>
     </div>
-    <%= submit_tag 'Search Quotes', class: "btn btn-primary" %>
+    <%= submit_tag 'Search Quotes', class: "btn btn-primary", name: "search_type", value: "Search Quotes" %>
+    <%= submit_tag 'Search for Anonymous', class: "btn btn-primary", name: "search_type", value: "Search for Anonymous" %>
 <% end %>
-
-<% if params[:philosopher_query].present? %>
-
-    <% if @quotematch.present? %>
-        <h4 style="padding-top: 15px;">Results:</h4>
-        <% @quotematch.each do |quote| %>
-            <h5 class="text-primary">
-                <%= "#{quote.Philosopher.firstName} #{quote.Philosopher.lastName}" %>
+<hr>
+<div class="row">
+  <% @quotematch.each do |quote| %>
+    <div class="col-12 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex flex-column">
+          <% if quote.philosopher.present? %>
+            <h5 class="card-title text-primary">
+              Author: <strong><%= "#{quote.philosopher.firstName} #{quote.philosopher.lastName}" %></strong>
             </h5>
-            <p><%= quote.quoteText %> <!-- [<a href="/quotes/<%= quote.id %>">Read full quote</a>] --> </p>
-            <br />
-        <% end %>
-    <% else %>
-        <p>No matching quotes found.</p>
-    <% end %>
-    
-<% end %>
+          <% else %>
+            <h5 class="card-title text-primary">Author: <strong>Anonymous</strong></h5>
+          <% end %>
+          <hr>
+          <p class="card-text"><em>Quote:</em> <%= quote.quoteText %></p>
+          <p class="card-text">
+            <strong>Posted By:</strong> <%= "#{quote.user.firstName}" %>
+          </p>
+          <div class="row mt-auto">
+            <div class="col-md-6">
+              <% if quote.datePosted.present? %>
+                <p class="card-text">
+                  <small class="text-muted">Date Posted: <%= quote.datePosted.strftime("%B %d, %Y") %></small>
+                </p>
+              <% else %>
+                <p class="card-text"><small class="text-muted">Date Posted: Not available</small></p>
+              <% end %>
+            </div>
+            <div class="col-md-6 text-end">
+                <% if logged_in? %> 
+                    <%= link_to 'Add Comment', new_quote_comment_path(quote.id), class: 'btn btn-primary btn-sm' %>
+                <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

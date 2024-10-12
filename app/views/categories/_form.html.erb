@@ -1,22 +1,26 @@
-<%= form_with(model: category) do |form| %>
+<%= form_with(model: category, local: true) do |form| %>
   <% if category.errors.any? %>
-    <div style="color: red">
+    <div style="color: red; margin-bottom: 1em;">
       <h2><%= pluralize(category.errors.count, "error") %> prohibited this category from being saved:</h2>
-
       <ul>
-        <% category.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+        <% category.errors.full_messages.each do |message| %>if quote_params[:category_quotes_attributes].present?
+        category_quote = @quote.category_quotes.new(
+          category_id: category_quote_attr[:category_id]
+        )
+        categories_quote.save
+      end
+          <li><%= message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :catName, style: "display: block" %>
-    <%= form.text_field :catName %>
+  <div class="form-group">
+    <%= form.label :catName, "Category Name", class: "form-label" %>
+    <%= form.text_field :catName, placeholder: "Enter category name", class: "form-control" %>
   </div>
-
-  <div>
-    <%= form.submit %>
+<hr>
+  <div class="form-actions">
+    <%= form.submit "Save Category", class: "btn btn-primary" %>
   </div>
 <% end %>

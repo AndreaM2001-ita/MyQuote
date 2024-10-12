@@ -19,14 +19,48 @@ class PhilosophersController < ApplicationController
   def edit
   end
 
-  # POST /philosophers or /philosophers.json
   def create
     @philosopher = Philosopher.new(philosopher_params)
-
+  
     respond_to do |format|
-      if @philosopher.save
-        format.html { redirect_to philosopher_url(@philosopher), notice: "Philosopher was successfully created." }
-        format.json { render :show, status: :created, location: @philosopher }
+      if @philosopher.firstName.blank? || @philosopher.lastName.blank? || @philosopher.birthYear.blank?
+        @philosopher.errors.add(:base, "First Name , Last Name and Birth Year are mandatory Fields.")
+      end
+   
+      if @philosopher.birthYear.present? && @philosopher.birthYear.to_i > Date.current.year
+        @philosopher.errors.add(:birthYear, "must be less than or equal to the current year.")
+      end
+  
+ 
+      if @philosopher.deathYear.present? && @philosopher.deathYear.to_i <= @philosopher.birthYear.to_i
+        @philosopher.errors.add(:deathYear, "must be greater than the birth year.")
+      end
+  
+      existing_philosopher = Philosopher.find_by(
+        firstName: @philosopher.firstName,
+        lastName: @philosopher.lastName,
+        birthYear: @philosopher.birthYear
+      )
+  
+      if existing_philosopher
+     
+        @philosopher.errors.add(:base, "Philosopher with the same first name, last name, and birth year already exists.")
+      end
+  
+      if @philosopher.errors.empty?
+        begin
+          if @philosopher.save
+            format.html { redirect_to philosopher_url(@philosopher), notice: "Philosopher was successfully created." }
+            format.json { render :show, status: :created, location: @philosopher }
+          else
+            format.html { render :new, status: :unprocessable_entity }
+            format.json { render json: @philosopher.errors, status: :unprocessable_entity }
+          end
+        rescue StandardError => e
+          @philosopher.errors.add(:base, "An error occurred: #{e.message}")
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @philosopher.errors, status: :unprocessable_entity }
+        end
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @philosopher.errors, status: :unprocessable_entity }
@@ -37,9 +71,39 @@ class PhilosophersController < ApplicationController
   # PATCH/PUT /philosophers/1 or /philosophers/1.json
   def update
     respond_to do |format|
-      if @philosopher.update(philosopher_params)
-        format.html { redirect_to philosopher_url(@philosopher), notice: "Philosopher was successfully updated." }
-        format.json { render :show, status: :ok, location: @philosopher }
+    
+      if @philosopher.firstName.blank? || @philosopher.lastName.blank? || @philosopher.birthYear.blank?
+        @philosopher.errors.add(:base, "All philosopher fields (first name, last name, birth year) cannot be empty.")
+      end
+  
+ 
+      if @philosopher.birthYear.present? && @philosopher.birthYear.to_i > Date.current.year
+        @philosopher.errors.add(:birthYear, "must be less than or equal to the current year.")
+      end
+  
+   
+      if @philosopher.deathYear.present? && @philosopher.deathYear.to_i <= @philosopher.birthYear.to_i
+        @philosopher.errors.add(:deathYear, "must be greater than the birth year.")
+      end
+      existing_philosopher = Philosopher.find_by(
+        firstName: @philosopher.firstName,
+        lastName: @philosopher.lastName,
+        birthYear: @philosopher.birthYear
+      )
+  
+      if existing_philosopher
+     
+        @philosopher.errors.add(:base, "Philosopher with the same first name, last name, and birth year already exists.")
+      end
+     
+      if @philosopher.errors.empty?
+        if @philosopher.update(philosopher_params)
+          format.html { redirect_to philosopher_url(@philosopher), notice: "Philosopher was successfully updated." }
+          format.json { render :show, status: :ok, location: @philosopher }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @philosopher.errors, status: :unprocessable_entity }
+        end
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @philosopher.errors, status: :unprocessable_entity }

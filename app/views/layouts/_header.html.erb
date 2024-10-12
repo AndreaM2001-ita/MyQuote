@@ -38,17 +38,18 @@
               User
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">My Account</a></li>
+              <li><a class="dropdown-item" href="<%= user_path(current_user) %>">My Account</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">    Update Details</a></li>
-              <li><a class="dropdown-item" href="#">Change Password</a></li>
+              <li><a class="dropdown-item" href="<%= edit_user_path(current_user) %>">Update Details</a></li>
+              <li><a class="dropdown-item" href="<%= change_password_path(current_user) %>">Change Password</a></li>
 
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">My Quotes</a></li>
+              <li><a class="dropdown-item" href="/quotes">My Quotes</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">  Add new Quote</a></li>
-              <li><a class="dropdown-item" href="#">  Add new Philosopher</a></li>
-              <li><a class="dropdown-item" href="#">  Add new Category</a></li>
+              <li><a class="dropdown-item" href="/quotes/new">  Add new Quote</a></li>
+              <li><a class="dropdown-item" href="/philosophers">Philosophers</a></li>
+              <li><a class="dropdown-item" href="/philosophers/new">  Add new Philosopher</a></li>
+              <li><a class="dropdown-item" href="/categories">  Add new Category</a></li>
             </ul>
           </li>
         <% end %>
@@ -58,7 +59,7 @@
               Admin
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Admin Home</a></li>
+            <li><a class="dropdown-item" href="<%= user_path(current_user) %>">My Account</a></li>
               <li><%= link_to 'Manage Users', users_path, class:"dropdown-item"%></li>
             </ul>
           </li>

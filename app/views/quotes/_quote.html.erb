@@ -1,27 +1,50 @@
-<div id="<%= dom_id quote %>">
-  <p>
-    <strong>Quotetext:</strong>
-    <%= quote.quoteText %>
-  </p>
+<div class="quote-container" style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; position: relative;">
+  <div id="<%= dom_id(quote) %>" class="quote-content">
+    <h3 class="quote-title">Quote Details</h3>
+    
+    <div class="quote-item">
+      <strong>Quote text:</strong>
+      <p><%= quote.quoteText %></p>
+    </div>
 
-  <p>
-    <strong>Ispublic:</strong>
-    <%= quote.isPublic %>
-  </p>
+    <div class="quote-item">
+      <strong>Date Posted:</strong>
+      <p><%= quote.datePosted %></p>
+    </div>
 
-  <p>
-    <strong>Dateposted:</strong>
-    <%= quote.datePosted %>
-  </p>
+    <div class="quote-item">
+      <strong>User:</strong>
+      <p><%= "#{quote.user.firstName} #{quote.user.lastName}" %></p>
+    </div>
 
-  <p>
-    <strong>User:</strong>
-    <%= quote.User_id %>
-  </p>
+    <div class="quote-item">
+      <strong>Philosopher:</strong>
+      <p>
+        <% if quote.philosopher.present? %>
+          <%= "#{quote.philosopher.firstName} #{quote.philosopher.lastName}" %>
+        <% else %>
+          Anonymous
+        <% end %>
+      </p>
+    </div>
 
-  <p>
-    <strong>Philosopher:</strong>
-    <%= quote.Philosopher_id %>
-  </p>
+    <div class="quote-item">
+      <strong>Category:</strong>
+      <p>
+        <% if quote.categories.any? %>
+          <%= quote.categories.map(&:catName).join(', ') %>
+        <% else %>
+          Uncategorized
+        <% end %>
+      </p>
+    </div>
 
+    <div class="quote-action" style="position: absolute; bottom: 10px; right: 10px; display: flex; gap: 10px;">
+      <% if logged_in? %>
+        <%= link_to 'Add Comment', new_quote_comment_path(quote), class: 'btn btn-primary' %>
+      <% end %>
+      <%= link_to 'Show Comments', quote_comments_path(quote), class: 'btn btn-secondary' %>
+    </div>
+    
+  </div>
 </div>

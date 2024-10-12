@@ -1,42 +1,104 @@
-<%= form_with(model: quote) do |form| %>
-  <% if quote.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(quote.errors.count, "error") %> prohibited this quote from being saved:</h2>
 
-      <ul>
-        <% quote.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+
+<%= form_with(model: @quote, url: @quote.new_record? ? quotes_path : quote_path(@quote), method: @quote.new_record? ? :post : :patch, local: true) do |f| %>
+  <% if @quote.errors.any? %>
+  <div class="alert alert-danger">
+    <ul>
+      <% @quote.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+  <%= f.hidden_field :user_id, value: current_user.id %>
+
+  <div class="col-md-6 form-group" style="padding-bottom: 10px;">
+    <%= f.text_field :quoteText, placeholder: 'Quote Text', class: 'form-control' %>
+  </div>
+
+  <div class="form-check" style="padding-bottom: 10px;">
+    <%= f.label :isPublic do %>
+      Public
+      <%= f.check_box :isPublic, { checked: true }, class: "form-check-input" %>
+    <% end %>
+  </div>
+
+  <div id="philosopher-container">
+    <h4>Add Philosopher</h4>
+
+    <div class="form-check">
+      <%= f.check_box :anonymous, { id: "anonymous-toggle" }, true, false %>
+      <%= f.label :anonymous, "Anonymous", class: "form-check-label" %>
+    </div>
+
+    <div id="philosopher-info" style="<%= @quote.philosopher.nil? ? 'display: none;' : 'display: block;' %>">
+      <%= f.fields_for :philosopher do |phi| %>
+        <div class="row mb-2">
+          <div class="col">
+            <%= phi.label :firstName, "First Name", class: "form-label" %>
+            <%= phi.text_field :firstName, class: "form-control", placeholder: "Enter First Name", value: @quote.philosopher&.firstName %>
+          </div>
+          <div class="col">
+            <%= phi.label :lastName, "Last Name", class: "form-label" %>
+            <%= phi.text_field :lastName, class: "form-control", placeholder: "Enter Last Name", value: @quote.philosopher&.lastName %>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <div class="col">
+            <%= phi.label :birthYear, "Birth Year", class: "form-label" %>
+            <%= phi.number_field :birthYear, class: "form-control", placeholder: "Enter Birth Year", min: 0, value: @quote.philosopher&.birthYear %>
+          </div>
+        </div>
+
+        <div class="form-group" style="padding-bottom: 10px;">
+          <%= phi.label :deathYear, "Death Year", class: "form-label" %>
+          <%= phi.number_field :deathYear, placeholder: "Enter Death Year", min: 0, class: "form-control", value: @quote.philosopher&.deathYear %>
+        </div>
+
+        <div class="form-group" style="padding-bottom: 10px;">
+          <%= phi.label :biography, "Biography", class: "form-label" %>
+          <%= phi.text_area :biography, placeholder: "Enter Biography", class: "form-control", value: @quote.philosopher&.biography %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @categories.any? %>
+    <div class="form-group" style="padding-bottom: 10px;">
+      <%= f.label :category_id, "Category", class: "form-label" %>
+      <%= f.select :category_id, @categories.collect { |category| [category.catName, category.id] }, 
+            { include_blank: true, selected: @selected_category_id }, 
+            class: "form-control" %>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :quoteText, style: "display: block" %>
-    <%= form.text_field :quoteText %>
-  </div>
-
-  <div>
-    <%= form.label :isPublic, style: "display: block" %>
-    <%= form.check_box :isPublic %>
-  </div>
-
-  <div>
-    <%= form.label :datePosted, style: "display: block" %>
-    <%= form.date_field :datePosted %>
-  </div>
-
-  <div>
-    <%= form.label :User_id, style: "display: block" %>
-    <%= form.text_field :User_id %>
-  </div>
-
-  <div>
-    <%= form.label :Philosopher_id, style: "display: block" %>
-    <%= form.text_field :Philosopher_id %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <hr>
+  <div class="mt-3">
+    <%= f.submit @quote.new_record? ? 'Create Quote' : 'Edit Quote', class: 'btn btn-primary btn-lg' %>
   </div>
 <% end %>
+
+<script defer>
+  document.addEventListener('DOMContentLoaded', function () {
+    let toggle = document.getElementById('anonymous-toggle');
+    let philosopherInfo = document.getElementById('philosopher-info');
+
+    function togglePhilosopherInfo() {
+      console.log("Checkbox state:", toggle.checked); // Log current state
+      if (toggle.checked) {
+        philosopherInfo.style.display = 'none'; // Hide philosopher fields if anonymous
+      } else {
+        philosopherInfo.style.display = 'block'; // Show philosopher fields if not anonymous
+      }
+    }
+
+    // Set the initial display based on the current state of the toggle
+    toggle.checked = <%= @anonymous ? 'true' : 'false'%>; // Initialize toggle based on the existing quote state
+    togglePhilosopherInfo(); // Call the function to set initial visibility
+
+    // Add change event listener
+    toggle.addEventListener('change', togglePhilosopherInfo); 
+    console.log("Event listener added");
+  });
+</script>

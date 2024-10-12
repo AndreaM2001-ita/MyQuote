@@ -1,8 +1,10 @@
 <%= form_with(model: user) do |form| %>
+
   <% if user.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
+      <h2>
+        <%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:
+      </h2>
       <ul>
         <% user.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -12,42 +14,59 @@
   <% end %>
 
   <div class="form-group" style="padding-bottom: 10px;">
-    <!--<%= form.label :firstName, style: "display: block" %>-->
-
-    <%= form.text_field :firstName, placeholder: 'First Name', class: 'form-control' %>
+    <%= form.text_field :firstName, placeholder: 'First Name', class: 'form-control', readonly: (logged_in? && is_administrator?) %>
   </div>
 
   <div class="form-group" style="padding-bottom: 10px;">
-    <!--<%= form.label :lastName, style: "display: block" %>-->
-
-    <%= form.text_field :lastName, placeholder: 'Last Name', class: 'form-control' %>
+    <%= form.text_field :lastName, placeholder: 'Last Name', class: 'form-control', readonly: (logged_in? && is_administrator?) %>
   </div>
 
   <div class="form-group" style="padding-bottom: 10px;">
-    <!--<%= form.label :Email, style: "display: block" %>-->
-
-    <%= form.text_field :email, placeholder: 'Email', class: 'form-control' %>
+    <%= form.text_field :email, placeholder: 'Email Address', class: 'form-control', readonly: (logged_in? && is_administrator?) %>
   </div>
 
-  <div class="form-group" style="padding-bottom: 10px;">
-    <!--<%= form.label :password, style: "display: block" %>-->
+  <% if logged_in? %>
+    <div class="form-group" style="padding-bottom: 10px;">
+      <%= link_to 'Change Password', change_password_path(current_user), class: 'btn btn-primary' %>
+    </div>
+  <% else %>
+    <div class="form-group" style="padding-bottom: 10px;">
+
     <%= form.password_field :password, placeholder: 'Choose a strong password', class: 'form-control' %>
   </div>
+  <% end %>
 
-  <div>
-    <!--<%= form.label :status, style: "display: block" %>
-    <%= form.text_field :status %>-->
-    <%= form.hidden_field :status, value: "Active" %>
+  <div class="form-group" style="padding-bottom: 10px;">
+
+    <% if logged_in? && is_administrator? %>
+      <%= form.label :is_admin do %>
+        Admin Role
+        <%= form.check_box :is_admin %>
+      <% end %>
+    <% else %>
+
+      <%= form.hidden_field :is_admin, value: false %>
+    <% end %>
+  </div>
+
+  <div class="form-group" style="padding-bottom: 10px;">
+    <% if logged_in? && is_administrator? %>
+      <%= form.select :status, ['Active', 'Suspended', 'Banned'], {}, class: 'form-control' %>
+    <% elsif logged_in? && !is_administrator? %>
+
+      <%= form.hidden_field :status %>
+    <% else %>
+      <%= form.hidden_field :status, value: "Active" %>
+    <% end %>
   </div>
 
   <div>
-    <!--<%= form.label :is_admin, style: "display: block" %>
-    <%= form.check_box :is_admin %>-->
-    <%= form.hidden_field :is_admin, value: false %>
+    <% if logged_in? %>
+      <%= form.submit 'Update', class: 'btn btn-primary' %>
+    <% else %>
+
+      <%= form.submit 'Submit', class: 'btn btn-primary' %>
+    <% end %>
   </div>
 
-  <div>
-    <!--<%= form.submit %>-->
-    <%= form.submit 'Submit', class: 'btn btn-primary' %>
-  </div>
 <% end %>

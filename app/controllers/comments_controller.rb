@@ -1,17 +1,23 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[ show edit update destroy ]
+  before_action :set_quote, only: %i[new create]
+  before_action :require_login, except: [:index, :show]
 
   # GET /comments or /comments.json
   def index
-    @comments = Comment.all
+    @quote = Quote.find(params[:quote_id]) 
+    @comments = @quote.comment
   end
 
   # GET /comments/1 or /comments/1.json
   def show
+    @quote = Quote.find(params[:quote_id]) 
+    @comment = @quote.comment.find(params[:id]) 
   end
 
   # GET /comments/new
   def new
+    @quote = Quote.find(params[:quote_id])  # Ensure this line is present
     @comment = Comment.new
   end
 
@@ -21,11 +27,16 @@ class CommentsController < ApplicationController
 
   # POST /comments or /comments.json
   def create
+    @quote = Quote.find(params[:quote_id])
     @comment = Comment.new(comment_params)
+    @comment.User_id = params[:comment][:user_id] 
+    @comment.Quote_id = params[:comment][:quote_id] 
+    @comment.datePosted = Time.current
+    
 
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to comment_url(@comment), notice: "Comment was successfully created." }
+        format.html { redirect_to quote_comments_path(@quote), notice: "Comment was successfully created." }
         format.json { render :show, status: :created, location: @comment }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -35,36 +46,34 @@ class CommentsController < ApplicationController
   end
 
   # PATCH/PUT /comments/1 or /comments/1.json
-  def update
-    respond_to do |format|
-      if @comment.update(comment_params)
-        format.html { redirect_to comment_url(@comment), notice: "Comment was successfully updated." }
-        format.json { render :show, status: :ok, location: @comment }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  #don't allow update if comments
 
-  # DELETE /comments/1 or /comments/1.json
-  def destroy
-    @comment.destroy
+  # DELETE /comments/:id or /comments/:id.json
+def destroy
+  @comment = Comment.find(params[:id])
 
-    respond_to do |format|
-      format.html { redirect_to comments_url, notice: "Comment was successfully destroyed." }
+  respond_to do |format|
+    if @comment.destroy
+      format.html { redirect_to quote_comments_url(@comment.Quote_id), notice: "Comment was successfully destroyed." }
       format.json { head :no_content }
+    else
+      format.html { redirect_to quote_comments_url(@comment.Quote_id), alert: "Comment could not be destroyed." }
+      format.json { render json: @comment.errors, status: :unprocessable_entity }
     end
   end
+end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_comment
       @comment = Comment.find(params[:id])
     end
+    def set_quote
+      @quote = Quote.find(params[:quote_id]) 
+    end
 
     # Only allow a list of trusted parameters through.
     def comment_params
-      params.require(:comment).permit(:comment, :datePosted, :User_id, :Quote_id)
+      params.require(:comment).permit(:comment)
     end
 end

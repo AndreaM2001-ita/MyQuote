@@ -1,32 +1,41 @@
-<div id="<%= dom_id user %>">
-  <p>
-    <strong>Firstname:</strong>
-    <%= user.firstName %>
-  </p>
+<div id="<%= dom_id user %>" class="my-4 border rounded p-4 shadow">
+  <h3 class="mb-4">User Profile</h3>
 
-  <p>
-    <strong>Lastname:</strong>
-    <%= user.lastName %>
-  </p>
+  <div class="mb-3">
+    <label class="form-label">First Name:</label>
+    <div class="fw-bold"><%= user.firstName %></div>
+  </div>
+  
+  <div class="mb-3">
+    <label class="form-label">Last Name:</label>
+    <div class="fw-bold"><%= user.lastName %></div>
+  </div>
+  
+  <div class="mb-3">
+    <label class="form-label">Email:</label>
+    <div class="fw-bold"><%= user.email %></div>
+  </div>
 
-  <p>
-    <strong>Email:</strong>
-    <%= user.email %>
-  </p>
-
-  <p>
-    <strong>Current Password: </strong><span class="text-danger">ENCRYPTED</span>
-    <% user.password_digest %>
-  </p>
-
-  <p>
-    <strong>Status:</strong>
-    <%= user.status %>
-  </p>
-
-  <p>
-    <strong>Is admin:</strong>
-    <%= user.is_admin %>
-  </p>
-
+  <% if logged_in? && is_administrator? %>
+    <div class="mb-3">
+      <label class="form-label">Current Password:</label>
+      <div class="text-danger fw-bold">ENCRYPTED</div>
+    </div>
+  
+    <div class="mb-3">
+      <label class="form-label">Account Type:</label>
+      <div class="fw-bold">
+        <% if user.is_admin %>
+          <span class="badge bg-success">Administrator</span>
+        <% else %>
+          <span class="badge bg-primary">Standard User</span>
+        <% end %>
+      </div>
+    </div>
+  
+    <div class="mb-3">
+      <label class="form-label">Status:</label>
+      <div class="fw-bold"><%= user.status %></div>
+    </div>
+  <% end %>
 </div>

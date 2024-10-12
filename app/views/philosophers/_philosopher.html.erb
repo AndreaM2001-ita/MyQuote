@@ -1,27 +1,18 @@
-<div id="<%= dom_id philosopher %>">
+<div id="<%= dom_id philosopher %>" class="philosopher-details" style="border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 5px; background-color: #f9f9f9;">
+  <h4><%= philosopher.firstName %> <%= philosopher.lastName %></h4>
+
   <p>
-    <strong>Firstname:</strong>
-    <%= philosopher.firstName %>
+    <strong>Birth Year:</strong>
+    <%= philosopher.birthYear.present? ? philosopher.birthYear : 'N/A' %>
   </p>
 
   <p>
-    <strong>Lastname:</strong>
-    <%= philosopher.lastName %>
-  </p>
-
-  <p>
-    <strong>Birthyear:</strong>
-    <%= philosopher.birthYear %>
-  </p>
-
-  <p>
-    <strong>Deathyear:</strong>
-    <%= philosopher.deathYear %>
+    <strong>Death Year:</strong>
+    <%= philosopher.deathYear.present? ? philosopher.deathYear : 'N/A' %>
   </p>
 
   <p>
     <strong>Biography:</strong>
-    <%= philosopher.biography %>
+    <%= philosopher.biography.present? ? philosopher.biography : 'Biography not available.' %>
   </p>
-
 </div>

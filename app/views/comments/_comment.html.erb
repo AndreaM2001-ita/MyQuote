@@ -1,22 +1,20 @@
-<div id="<%= dom_id comment %>">
-  <p>
-    <strong>Comment:</strong>
-    <%= comment.comment %>
-  </p>
+<div id="<%= dom_id(comment) %>" class="comment-card" style="border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; padding: 15px; margin-bottom: 15px;">
+  <div class="comment-header" style="border-bottom: 1px solid #ddd; margin-bottom: 10px;">
+    <h3>User: <%= comment.user.firstName %></h3>
+    <p class="comment-date">
+      <em>Posted on: <%= comment.datePosted.strftime('%B %d, %Y') if comment.datePosted %></em>
+    </p>
+  </div>
 
-  <p>
-    <strong>Dateposted:</strong>
-    <%= comment.datePosted %>
-  </p>
+  <div class="comment-body">
+    <p>
+      <strong>Comment:</strong>
+      <span><%= comment.comment %></span>
+    </p>
 
-  <p>
-    <strong>User:</strong>
-    <%= comment.User_id %>
-  </p>
-
-  <p>
-    <strong>Quote:</strong>
-    <%= comment.Quote_id %>
-  </p>
-
+    <p>
+      <strong>Quote:</strong>
+      <span><%= comment.quote.quoteText %></span>
+    </p>
+  </div>
 </div>
