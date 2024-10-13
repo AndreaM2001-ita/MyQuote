@@ -8,7 +8,7 @@ class SearchController < ApplicationController
         query_parts = philosophers_query.split(' ')
         
         if query_parts.size == 1
-          # Search only with last or first name 
+          # search with one word
           search_query = "%#{query_parts.first}%"
           @quotematch = Quote.joins(:philosopher)
                             .where("philosophers.firstName LIKE ? OR philosophers.lastName LIKE ?", 
@@ -17,7 +17,7 @@ class SearchController < ApplicationController
                                     .where(isPublic: true)
                             .distinct
         elsif query_parts.size >= 2
-          # Search with first and last name 
+          # search with 2 words
           first_name_query = "%#{query_parts.first}%"
           last_name_query = "%#{query_parts.last}%"
           @quotematch = Quote.joins(:philosopher)

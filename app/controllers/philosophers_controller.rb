@@ -23,30 +23,33 @@ class PhilosophersController < ApplicationController
     @philosopher = Philosopher.new(philosopher_params)
   
     respond_to do |format|
+      #check if first name, last name and birth year are present as mandatory for creation
       if @philosopher.firstName.blank? || @philosopher.lastName.blank? || @philosopher.birthYear.blank?
         @philosopher.errors.add(:base, "First Name , Last Name and Birth Year are mandatory Fields.")
       end
-   
-      if @philosopher.birthYear.present? && @philosopher.birthYear.to_i > Date.current.year
+      # check if birth year is after today's date -> impossible
+      if @philosopher.birthYear.to_i > Date.current.year
         @philosopher.errors.add(:birthYear, "must be less than or equal to the current year.")
       end
   
- 
+      #if the death year is present check that the death yeqh is  after the birth year
       if @philosopher.deathYear.present? && @philosopher.deathYear.to_i <= @philosopher.birthYear.to_i
         @philosopher.errors.add(:deathYear, "must be greater than the birth year.")
       end
-  
+      
+      #if a phisosopher with those attributes already exists, no need to create a new one ->check
       existing_philosopher = Philosopher.find_by(
         firstName: @philosopher.firstName,
         lastName: @philosopher.lastName,
         birthYear: @philosopher.birthYear
       )
-  
+      
+      #phisosopher exists in databse
       if existing_philosopher
-     
         @philosopher.errors.add(:base, "Philosopher with the same first name, last name, and birth year already exists.")
       end
-  
+      
+      #arethere any errors for the philosopher 
       if @philosopher.errors.empty?
         begin
           if @philosopher.save
@@ -57,6 +60,7 @@ class PhilosophersController < ApplicationController
             format.json { render json: @philosopher.errors, status: :unprocessable_entity }
           end
         rescue StandardError => e
+          #left out errors are caught here
           @philosopher.errors.add(:base, "An error occurred: #{e.message}")
           format.html { render :new, status: :unprocessable_entity }
           format.json { render json: @philosopher.errors, status: :unprocessable_entity }
@@ -71,20 +75,21 @@ class PhilosophersController < ApplicationController
   # PATCH/PUT /philosophers/1 or /philosophers/1.json
   def update
     respond_to do |format|
-    
+      # when updating the three initial fields are still mandatory
       if @philosopher.firstName.blank? || @philosopher.lastName.blank? || @philosopher.birthYear.blank?
         @philosopher.errors.add(:base, "All philosopher fields (first name, last name, birth year) cannot be empty.")
       end
-  
- 
-      if @philosopher.birthYear.present? && @philosopher.birthYear.to_i > Date.current.year
+
+      #check that birth year is smaller tahn today's year
+      if @philosopher.birthYear.to_i > Date.current.year
         @philosopher.errors.add(:base, " Birth Year must be less than or equal to the current year.")
       end
   
-   
+      #if the death year is present make suyre that it is after birth year mathematically
       if @philosopher.deathYear.present? && @philosopher.deathYear.to_i <= @philosopher.birthYear.to_i
         @philosopher.errors.add(:base, " Death Year must be greater than the birth year.")
       end
+      #check if the same phisosopher exists, if he does do not create a new one
       existing_philosopher = Philosopher.find_by(
         firstName: @philosopher.firstName,
         lastName: @philosopher.lastName,

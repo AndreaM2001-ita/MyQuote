@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
                 else
                     redirect_to userhome_path, notice: "Logged in successfully!"
                 end
-            elsif user.status == "Suspended"
+            elsif user.status == "Suspended" # based on status putput a different message to user
                 flash.now[:error] = "Your account is suspended. Please contact support."
                 render 'new'
             elsif user.status == "Banned"

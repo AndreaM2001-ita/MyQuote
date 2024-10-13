@@ -9,12 +9,15 @@ class CommentsController < ApplicationController
     @comments = @quote.comment
   end
 
+  #when you wnat to show a comment, look for the quote it refers to and find the comments of that quote.
+  #find one comment based on IDs
   # GET /comments/1 or /comments/1.json
   def show
     @quote = Quote.find(params[:quote_id]) 
     @comment = @quote.comment.find(params[:id]) 
   end
 
+  #when a new quote is being created lod a new comment and load the quote it refers to 
   # GET /comments/new
   def new
     @quote = Quote.find(params[:quote_id])  # Ensure this line is present
@@ -25,6 +28,7 @@ class CommentsController < ApplicationController
   def edit
   end
 
+  #each comment has to save the user who wrote it and the quote that it refers to 
   # POST /comments or /comments.json
   def create
     @quote = Quote.find(params[:quote_id])

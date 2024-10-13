@@ -25,6 +25,7 @@ class CategoriesController < ApplicationController
     existing_category = Category.find_by(catName: category_params[:catName])
     @category = Category.new(category_params)
     respond_to do |format|
+      #added check to see if the category that is being added already exists
       if existing_category
         @category.errors.add(:base, "Category already exists")
         format.html { render :new, status: :unprocessable_entity }
@@ -42,7 +43,7 @@ class CategoriesController < ApplicationController
       end
     end
   end
-
+  #this function is not used as user cannot access the edit section 
   # PATCH/PUT /categories/1 or /categories/1.json
   def update
     respond_to do |format|

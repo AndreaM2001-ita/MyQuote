@@ -30,8 +30,9 @@ Rails.application.routes.draw do
 
   get '/quotes', to: 'home#uquotes'  #quotes of current user
 
-  get '/change_password', to: 'users#change_password'
-  patch '/change_password', to: 'users#update_password'
+  get '/change_password', to: 'users#change_password' #get page to change pasw
+
+  patch '/change_password', to: 'users#update_password' #patch the current password
 
 
 

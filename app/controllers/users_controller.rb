@@ -49,6 +49,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1 or /users/1.json
   def update
     respond_to do |format|
+      #check that there is always ana dmin in app
       if @user.is_admin? && user_params[:is_admin] == "false" && User.where(is_admin: true).count == 1
         @user.errors.add(:base, "There must be at least one admin user.")
         format.html { render :edit, status: :unprocessable_entity }
@@ -67,7 +68,7 @@ class UsersController < ApplicationController
 
   # DELETE /users/1 or /users/1.json
   def destroy
- 
+    #check that there is always ana dmin in app
     if @user.is_admin? && User.where(is_admin: true).count == 1
       respond_to do |format|
         @user.errors.add(:base, "There must be at least one admin user.")
