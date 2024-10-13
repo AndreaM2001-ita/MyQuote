@@ -49,23 +49,37 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1 or /users/1.json
   def update
     respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
-        format.json { render :show, status: :ok, location: @user }
-      else
+      if @user.is_admin? && user_params[:is_admin] == "false" && User.where(is_admin: true).count == 1
+        @user.errors.add(:base, "There must be at least one admin user.")
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
+      else
+        if @user.update(user_params)
+          format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
+          format.json { render :show, status: :ok, location: @user }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @user.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
 
   # DELETE /users/1 or /users/1.json
   def destroy
-    @user.destroy
-
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: "User was successfully destroyed." }
-      format.json { head :no_content }
+ 
+    if @user.is_admin? && User.where(is_admin: true).count == 1
+      respond_to do |format|
+        @user.errors.add(:base, "There must be at least one admin user.")
+        format.html { redirect_to users_url, alert: "Cannot delete the last admin user." }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    else
+      @user.destroy
+      respond_to do |format|
+        format.html { redirect_to users_url, notice: "User was successfully destroyed." }
+        format.json { head :no_content }
+      end
     end
   end
   def change_password

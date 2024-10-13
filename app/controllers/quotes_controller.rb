@@ -59,7 +59,6 @@ class QuotesController < ApplicationController
         if philosopher_params[:birthYear].to_i > Date.current.year
           @quote.errors.add(:base, "Philosopher's birth year must be less than or equal to the current year.")
         end
-  
 
         existing_philosopher = Philosopher.find_by(
           firstName: philosopher_params[:firstName],
@@ -70,8 +69,12 @@ class QuotesController < ApplicationController
         if existing_philosopher
     
           if philosopher_params[:deathYear].present? && existing_philosopher.deathYear.nil?
-            existing_philosopher.deathYear = philosopher_params[:deathYear]
-            existing_philosopher.save
+            if philosopher_params[:birthYear].to_i>philosopher_params[:deathYear].to_i
+              @quote.errors.add(:base, "Death Year of Phisosopher cannot be before the Birth Year")
+            else
+              existing_philosopher.deathYear = philosopher_params[:deathYear]
+              existing_philosopher.save
+            end
           end
           @quote.philosopher = existing_philosopher
         else
@@ -126,11 +129,11 @@ class QuotesController < ApplicationController
     else
       philosopher_params = quote_params[:philosopher_attributes]
 
-      # Check for required philosopher fields
+    
       if philosopher_params[:firstName].blank? || philosopher_params[:lastName].blank? || philosopher_params[:birthYear].blank?
         @quote.errors.add(:base, "Philosopher details must be provided.")
       else
-        # Check if the birth year is valid
+        
         if philosopher_params[:birthYear].to_i > Date.current.year
           @quote.errors.add(:base, "Philosopher's birth year must be less than or equal to the current year.")
         else
@@ -146,11 +149,25 @@ class QuotesController < ApplicationController
           else
             @quote.build_philosopher(philosopher_params)
           end
+          if existing_philosopher
+    
+            if philosopher_params[:deathYear].present? && existing_philosopher.deathYear.nil?
+              if philosopher_params[:birthYear].to_i>philosopher_params[:deathYear].to_i
+                @quote.errors.add(:base, "Death Year of Phisosopher cannot be before the Birth Year")
+              else
+                existing_philosopher.update(philosopher_params)
+              end
+            end
+            @quote.philosopher = existing_philosopher
+          else
+   
+            @quote.build_philosopher(philosopher_params)
+          end
         end
       end
     end
 
-    # Filter out philosopher attributes for the quote update
+   
     filtered_quote_params = quote_params.except(:philosopher_attributes)
 
     # Only attempt to update if there are no errors

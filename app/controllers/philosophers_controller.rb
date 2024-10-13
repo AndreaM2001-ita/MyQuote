@@ -78,12 +78,12 @@ class PhilosophersController < ApplicationController
   
  
       if @philosopher.birthYear.present? && @philosopher.birthYear.to_i > Date.current.year
-        @philosopher.errors.add(:birthYear, "must be less than or equal to the current year.")
+        @philosopher.errors.add(:base, " Birth Year must be less than or equal to the current year.")
       end
   
    
       if @philosopher.deathYear.present? && @philosopher.deathYear.to_i <= @philosopher.birthYear.to_i
-        @philosopher.errors.add(:deathYear, "must be greater than the birth year.")
+        @philosopher.errors.add(:base, " Death Year must be greater than the birth year.")
       end
       existing_philosopher = Philosopher.find_by(
         firstName: @philosopher.firstName,

@@ -39,26 +39,34 @@
   <div class="form-group" style="padding-bottom: 10px;">
 
     <% if logged_in? && is_administrator? %>
-      <%= form.label :is_admin do %>
-        Admin Role
-        <%= form.check_box :is_admin %>
+      <% if @user.id != current_user.id %> <!-- Check if the user being edited is not the logged-in user -->
+        <%= form.label :is_admin do %>
+          Admin Role
+          <%= form.check_box :is_admin %>
+        <% end %>
+      <% else %>
+        <%= form.hidden_field :is_admin, value: @user.is_admin? %> <!-- Keep current admin status if editing self -->
       <% end %>
     <% else %>
-
       <%= form.hidden_field :is_admin, value: false %>
     <% end %>
   </div>
 
   <div class="form-group" style="padding-bottom: 10px;">
-    <% if logged_in? && is_administrator? %>
-      <%= form.select :status, ['Active', 'Suspended', 'Banned'], {}, class: 'form-control' %>
-    <% elsif logged_in? && !is_administrator? %>
-
-      <%= form.hidden_field :status %>
+  <% if logged_in? && is_administrator? %>
+    <% if current_user == @user %>
+      <%= form.hidden_field :status, value: @user.status %>
     <% else %>
-      <%= form.hidden_field :status, value: "Active" %>
+      <%= form.select :status, ['Active', 'Suspended', 'Banned'], {}, class: 'form-control' %>
     <% end %>
-  </div>
+  <% elsif logged_in? %>
+ 
+    <%= form.hidden_field :status, value: @user.status %>
+  <% else %>
+ 
+    <%= form.hidden_field :status, value: "Active" %>
+  <% end %>
+</div>
 
   <div>
     <% if logged_in? %>
